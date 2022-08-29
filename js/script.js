@@ -21,10 +21,11 @@ Vector2.prototype.sub = function (otherVector) {
   return this;
 };
 
-function Vector3(x, y, z) {
+function Vector3(x, y, z, w = 1) {
   this.x = x;
   this.y = y;
   this.z = z;
+  this.w = w;
 }
 
 Vector3.prototype.length = function () {
@@ -114,6 +115,25 @@ Matrix.prototype.multiplyMatrix = function (matrixB) {
   return result;
 };
 
+Matrix.prototype.multiplyVector = function (vector) {
+  const arrayV = Object.values(vector);
+  const result = [];
+  if (this.matrix.length !== arrayV.length) {
+    return alert(
+      "Количество столбцов матрицы не равняется количеству значений вектора"
+    );
+  }
+
+  for (let i = 0; i < this.matrix.length; i++) {
+    result[i] = 0;
+    for (let j = 0; j < this.matrix.length; j++) {
+      result[i] += this.matrix[i][j] * arrayV[j];
+    }
+  }
+
+  return result;
+};
+
 function Sphere(center = new Vector3(), radius) {
   this.center = center;
   this.radius = radius;
@@ -154,15 +174,30 @@ function init() {
   //   console.log(
   //     new Sphere({ x: 4, y: -6, z: 3 }, 4).distanceToPoint({ x: -1, y: 5, z: -4 })
   //   );
+  //   console.log(
+  //     new Matrix([
+  //       [2, 0, -1],
+  //       [0, -2, 2],
+  //     ]).multiplyMatrix([
+  //       [4, 1, 0],
+  //       [3, 2, 1],
+  //       [0, 1, 0],
+  //     ])
+  //   );
+  //   console.log(
+  //     new Matrix([
+  //       [2, 4, 0],
+  //       [-2, 1, 3],
+  //       [-1, 0, 1],
+  //     ]).multiplyVector(new Vector3(1, 2, -1))
+  //   );
   console.log(
     new Matrix([
-      [2, 0, -1],
-      [0, -2, 2],
-    ]).multiplyMatrix([
-      [4, 1, 0],
-      [3, 2, 1],
-      [0, 1, 0],
-    ])
+      [1, 0, 0, 10],
+      [0, 1, 0, 5],
+      [0, 0, 1, -1],
+      [0, 0, 0, 1],
+    ]).multiplyVector(new Vector3(10, 10, 10))
   );
 }
 
